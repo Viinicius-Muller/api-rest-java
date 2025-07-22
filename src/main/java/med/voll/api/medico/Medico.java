@@ -1,6 +1,7 @@
 package med.voll.api.medico;
 
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -37,4 +38,21 @@ public class Medico {
         this.endereco = new Endereco(dados.endereco()); //passa os dados de endereço pra JPA Endereco
     }
 
+    public void atualizarInfo(@Valid DadosAtualizacaoMedico dados) {
+        dados.nome().ifPresent(valorNome -> {
+            if (valorNome.trim().isEmpty()) {
+                throw new IllegalArgumentException("Campo 'nome' não pode ser enviado em branco.");
+            }
+            this.nome = valorNome;
+        });
+
+        dados.telefone().ifPresent(valorTelefone -> {
+            if (valorTelefone.trim().isEmpty()) {
+                throw new IllegalArgumentException("Campo 'telefone' não pode ser enviado em branco.");
+            }
+            this.telefone = telefone;
+        });
+
+        dados.endereco().ifPresent(valorEndereco -> { this.endereco.atualizarInfo(valorEndereco);});
+    }
 }
