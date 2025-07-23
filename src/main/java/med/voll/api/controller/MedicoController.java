@@ -41,4 +41,11 @@ public class MedicoController {
         var medico = repository.getReferenceById(dados.id()); //Busca o médico pelo id no json
         medico.atualizarInfo(dados); //JPA detecta atributos
     }
+
+    //Deletar completamente médico por id
+    @DeleteMapping("/{id}") //parâmetro dinâmico
+    @Transactional
+    public void excluir(@PathVariable Long id) { //Variable do Path(URL)
+        repository.deleteById(id);
+    }
 }
