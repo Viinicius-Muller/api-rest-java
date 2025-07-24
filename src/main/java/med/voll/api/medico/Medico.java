@@ -22,6 +22,7 @@ public class Medico {
     private String email;
     private String crm;
     private String telefone;
+    private Boolean ativo;
 
     @Enumerated(EnumType.STRING)
     private Especialidade especialidade;
@@ -35,6 +36,7 @@ public class Medico {
         this.crm = dados.crm();
         this.telefone = dados.telefone();
         this.especialidade = dados.especialidade();
+        this.ativo = true;
         this.endereco = new Endereco(dados.endereco()); //passa os dados de endereço pra JPA Endereco
     }
 
@@ -54,5 +56,9 @@ public class Medico {
         });
 
         dados.endereco().ifPresent(valorEndereco -> { this.endereco.atualizarInfo(valorEndereco);});
+    }
+
+    public void excluir() {
+        this.ativo = false;
     }
 }

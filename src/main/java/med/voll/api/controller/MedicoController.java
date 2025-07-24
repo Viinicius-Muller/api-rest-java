@@ -31,7 +31,7 @@ public class MedicoController {
     @GetMapping
     public Page<DadosListagemMedico> listar(@PageableDefault(size = 10, sort = {"nome"}) Pageable paginacao) { //Pageable -> Spring
         //Converter Medicos para DadosListagemMedico
-        return repository.findAll(paginacao).map(DadosListagemMedico::new); //Page
+        return repository.findAllByAtivoTrue(paginacao).map(DadosListagemMedico::new); //Page
     }
 
     //Edita dados de um médico pelo id
@@ -42,10 +42,11 @@ public class MedicoController {
         medico.atualizarInfo(dados); //JPA detecta atributos
     }
 
-    //Deletar completamente médico por id
+    //Desativar médico por id
     @DeleteMapping("/{id}") //parâmetro dinâmico
     @Transactional
     public void excluir(@PathVariable Long id) { //Variable do Path(URL)
-        repository.deleteById(id);
+        var medico = repository.getReferenceById(id);
+        medico.excluir();
     }
 }
