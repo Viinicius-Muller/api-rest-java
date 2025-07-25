@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -32,6 +33,12 @@ public class MedicoController {
     public Page<DadosListagemMedico> listar(@PageableDefault(size = 10, sort = {"nome"}) Pageable paginacao) { //Pageable -> Spring
         //Converter Medicos para DadosListagemMedico
         return repository.findAllByAtivoTrue(paginacao).map(DadosListagemMedico::new); //Page
+    }
+
+    @GetMapping("/{id}")
+    public DadosListagemMedico listarMedico(@PathVariable Long id) {
+        var medico = repository.getReferenceById(id);
+        return new DadosListagemMedico(medico); //points to medico
     }
 
     //Edita dados de um médico pelo id
